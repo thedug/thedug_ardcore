@@ -77,7 +77,7 @@ void loop()
     pattern=analogRead(2) /205;  // UP, DOWN, UP_DOWN, ALTERNATE, RANDOM 
     
     //TODO: This octave impl is kinda getto since it can cause values to "roll over"
-    octave= ( analogRead(3) / 205 )  + 1; // scale down to 5 values
+    octave= ( analogRead(3) / 213 )  + 1; // scale down to 5 values, leave room to detect reset
     
     //Serial.println("loop.... ");
 
@@ -86,6 +86,11 @@ void loop()
     digitalWrite(digPin[1], clkState);  
     //TODO: Should I detect the user changing the values and "reset" state?
     //      A reset input may be handy as well.. Maybe ocatve is not as useful as a reset?
+  
+    if(octave > 4.85){
+        Serial.println("Reseting");
+        currentPosition=0;
+    }
   
     // check to see if the clock as been set
     if (clkState == HIGH) {
@@ -108,10 +113,7 @@ void loop()
       Serial.print("Octave:"); 
       Serial.println(octave); 
    
-     
-
-      
-      if (pattern == 0) {
+     if (pattern == 0) {
          Serial.println("Up Pattern");  
           currentPosition++;
           if(chords[chord][currentPosition] == 0){
@@ -174,11 +176,11 @@ void loop()
       Serial.print("Playing note: ");
       Serial.println(chords[chord][currentPosition]);
       Serial.print("Value: ");
-      Serial.println((chords[chord][currentPosition] + root) * 51 * octave / 12);
+      Serial.println((51 + chords[chord][currentPosition] * 51/12) * octave);
 
       //Reset previous...
       previousPosition = currentPosition;
-      dacOutput((chords[chord][currentPosition] + root) * 51 * octave / 12);
+      dacOutput((51 + chords[chord][currentPosition] * 51/12) * octave);
       
     }
   
