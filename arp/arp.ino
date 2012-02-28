@@ -176,11 +176,13 @@ void loop()
       Serial.print("Playing note: ");
       Serial.println(chords[chord][currentPosition]);
       Serial.print("Value: ");
-      Serial.println((51 + chords[chord][currentPosition] * 51/12) * octave);
-
+      
       //Reset previous...
       previousPosition = currentPosition;
-      dacOutput((51 + chords[chord][currentPosition] * 51/12) * octave);
+
+      int note = (51 + (chords[chord][currentPosition] + root) * 51/12) * octave;
+      Serial.println(note);
+      dacOutput(note);
       
     }
   
