@@ -77,7 +77,8 @@ void loop()
     pattern=analogRead(2) /205;  // UP, DOWN, UP_DOWN, ALTERNATE, RANDOM 
     
     //TODO: This octave impl is kinda getto since it can cause values to "roll over"
-    octave= ( analogRead(3) / 213 )  + 1; // scale down to 5 values, leave room to detect reset
+    int pin3 = analogRead(3);
+    octave= ( pin3 / 205 )  + 1; // scale down to 5 values, leave room to detect reset
     
     //Serial.println("loop.... ");
 
@@ -87,8 +88,8 @@ void loop()
     //TODO: Should I detect the user changing the values and "reset" state?
     //      A reset input may be handy as well.. Maybe ocatve is not as useful as a reset?
   
-    if(octave > 4.85){
-        Serial.println("Reseting");
+    if(pin3 > 1010){
+        Serial.println("Got Reset");
         currentPosition=0;
     }
   
