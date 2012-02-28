@@ -230,27 +230,4 @@ void dacOutput(long v)
   }
 }
 
-//  deJitter(int, int) - smooth jitter input
-//  ----------------------------------------
-int deJitter(int v, int test)
-{
-  // this routine just make sure we have a significant value
-  // change before we bother implementing it. This is useful
-  // for cleaning up jittery analog inputs.
-  if (abs(v - test) > 8) {
-    return v;
-  }
-  return test;
-}
-
-//  quantNote(int) - drop an incoming value to a note value
-//  -------------------------------------------------------
-int quantNote(int v)
-{
-  // feed this routine the input from one of the analog inputs
-  // and it will return the value in a 0-64 range, which is
-  // roughly the equivalent of a 0-5V range.
-  return v >> 4;
-}
-
 //  ===================== end of program =======================
