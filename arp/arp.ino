@@ -72,8 +72,8 @@ void loop()
   
   
     //TODO: Would a v/oct input be better?
-    root=analogRead(0) / 85; //12 value = A,A#,B,C#, etc
-    chord=analogRead(1) / 85; // 12 values see chords array above
+    root=analogRead(0) / 86; //12 value = A,A#,B,C#, etc
+    chord=analogRead(1) / 86; // 12 values see chords array above
     pattern=analogRead(2) /205;  // UP, DOWN, UP_DOWN, ALTERNATE, RANDOM 
     
     //TODO: This octave impl is kinda getto since it can cause values to "roll over"
