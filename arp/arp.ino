@@ -25,7 +25,8 @@ int root, chord, pattern, octave;
 int MAX_CHORD_LENGTH = 5;
 
 //Chords are represented as 4 note sequences. 1-12, where A=1,A#=2,B=3,C etc  
-int chords[12][5] = {{1,2,0,0,0}, {1,3,0,0,0}, {1,7,0,0,0}, {1,9,0,0,0}, {1,11,0,0,0}, {1,4,7,0,0}, {1,3,7,0,0}, {1,3,7,11,0},{1,3,7,10,0}, {1,4,7,11,0},{1,4,9,11,0}, {1,2,9,11,0}};
+int chords[12][5] = {{1,4,8,0,0}, {1,5,8,0,0}, {1,8,8,0,0}, {1,4,7,0,0}, {1,5,8,10,0}, {1,5,8,12,0}, {1,4,8,11,0}, {1,5,10,0,0},{1,5,8,11,0}, {1,5,8,15,0},{1,5,10,0,0}, {1,4,8,10,0}};
+String chordName[12] = {"Major", };
 int currentChord[5];
 
 //  ==================== start of setup() ======================
@@ -78,7 +79,7 @@ void loop()
     
     //TODO: This octave impl is kinda getto since it can cause values to "roll over"
     int pin3 = analogRead(3);
-    octave= ( pin3 / 205 )  + 1; // scale down to 5 values, leave room to detect reset
+    octave= ( pin3 / 205 ); // scale down to 5 values, leave room to detect reset
     
     //Serial.println("loop.... ");
 
@@ -119,13 +120,7 @@ void loop()
           currentPosition++;
           if(chords[chord][currentPosition] == 0){
            currentPosition = 0;
-           Serial.print("current Position in up");
-           Serial.println(currentPosition);              
-           Serial.println("Resetting value");
           }      
-           Serial.print("current Position");
-           Serial.println(currentPosition);  
-
       }else if(pattern == 1){
           Serial.println("Down Pattern");  
           currentPosition--;
@@ -174,7 +169,6 @@ void loop()
           }else{
             currentPosition = 1;
           }
-      }
       }else if(pattern == 5){
           Serial.println("Alternate 1-3");         
           if(previousPosition != 0){
@@ -183,7 +177,6 @@ void loop()
           }else{
             currentPosition = 2;
           }
-      }      
       }else if(pattern == 6){
            Serial.println("Random");         
           while(currentPosition == previousPosition || chords[chord][currentPosition] == 0){
@@ -198,7 +191,7 @@ void loop()
       //Reset previous...
       previousPosition = currentPosition;
 
-      int note = ((chords[chord][currentPosition] + root) * 4) * octave;
+      int note = ((chords[chord][currentPosition] + root) * 4) + (12 * 4 octave);
       Serial.println(note);
       dacOutput(note);
       

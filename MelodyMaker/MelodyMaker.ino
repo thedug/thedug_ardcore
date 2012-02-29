@@ -13,15 +13,14 @@ volatile int clkState = LOW;
 int digState[2] = {LOW, LOW};        // start with both set low
 unsigned long digMilli[2] = {0, 0};  // a place to store millis()
 
-String notes[2] = {"ccggaagffeeddc ", "ccggaagffeeddc "}; // a space represents a rest
+String notes = "ccggaagffeeddc "; // a space represents a rest
 int beats[] = { 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 4 };
 int tempo = 450;
 
-//TODO: Add the following:
-//  bank (12)
-//  melody
-//  octave
-//  reset (& length)
+char names[] = { 'a', 'A', 'b', 'c', 'C', 'd', 'D', 'e', 'f', 'F', 'g', 'G' };
+int tones[] = { 0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48};
+
+int reset, octave, transpose, lengthMod;
 
 //  ==================== start of setup() ======================
 
@@ -61,18 +60,15 @@ void setup()
    
 }
 
-void playNote(char note, int duration) {
-  char names[] = { 'a', 'A', 'b', 'c', 'C', 'd', 'D', 'e', 'f', 'F', 'g', 'G' };
-  int tones[] = { 51, 55, 60, 64, 68, 72, 77, 81, 85, 89, 94, 98, 102};
-  int d = duration;
-  // play the tone corresponding to the note name
+void playNote(char note, int duration, int transpose, int octave) {
 
   if(note != ' '){
     /* not a rest */
     for (int i = 0; i < 12; i++) {
+      
       if (names[i] == note) {
           //TODO: add octave
-          dacOutput(tones[i]);
+          dacOutput(tones[i] + transpose + (12 * octave * 4));
       }
     }
   }
@@ -84,9 +80,18 @@ void playNote(char note, int duration) {
 
 
 void loop() {
-  int length = notes[0].length() ;
+  
+  reset=analogRead(0) / 86; //12 value = A,A#,B,C#, etc
+  octave=analogRead(1) / 86; // 12 values see chords array above
+  transpose=analogRead(2) /86;  // UP, DOWN, UP_DOWN, ALTERNATE 1-ALL, ALTERNATE 1-2, ALTERNATE 1-3, RANDOM 
+  lengthMod=analogRead(3) / 86 + 1;  
+  
+  int length = notes.length() ;
   for (int i = 0; i < length; i++) {
-     playNote(notes[0][i], beats[i] * tempo);
+     if(analogRead(0) > 512){
+       i = 0;
+     }
+     playNote(notes[i], beats[i] * tempo * lengthMod, transpose, octave);
   }
 }
  
@@ -124,5 +129,6 @@ void dacOutput(long v)
 
 
 //  ===================== end of program =======================
+
 
 
