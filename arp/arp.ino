@@ -75,7 +75,7 @@ void loop()
     //TODO: Would a v/oct input be better?
     root=analogRead(0) / 86; //12 value = A,A#,B,C#, etc
     chord=analogRead(1) / 86; // 12 values see chords array above
-    pattern=analogRead(2) /146;  // UP, DOWN, UP_DOWN, ALTERNATE 1-ALL, ALTERNATE 1-2, ALTERNATE 1-3, RANDOM 
+    pattern=analogRead(2) /147;  // UP, DOWN, UP_DOWN, ALTERNATE 1-ALL, ALTERNATE 1-2, ALTERNATE 1-3, RANDOM 
     
     //TODO: This octave impl is kinda getto since it can cause values to "roll over"
     int pin3 = analogRead(3);
@@ -140,6 +140,7 @@ void loop()
               while(chords[chord][currentPosition] == 0){
                 currentPosition = currentPosition -1;
               }
+              currentPosition = currentPosition -1;
               currentDirection = 2;
             }            
           }else{
@@ -191,7 +192,7 @@ void loop()
       //Reset previous...
       previousPosition = currentPosition;
 
-      int note = ((chords[chord][currentPosition] + root) * 4) + (12 * 4 octave);
+      int note = (((chords[chord][currentPosition] + root) * 4) + (12 * 4 * octave));
       Serial.println(note);
       dacOutput(note);
       
