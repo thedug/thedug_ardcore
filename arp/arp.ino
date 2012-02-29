@@ -181,7 +181,7 @@ void loop()
       //Reset previous...
       previousPosition = currentPosition;
 
-      int note = (51 + (chords[chord][currentPosition] + root) * 51/12) * octave;
+      int note = ((chords[chord][currentPosition] + root) * 4) * octave;
       Serial.println(note);
       dacOutput(note);
       
