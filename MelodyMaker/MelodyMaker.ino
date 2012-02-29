@@ -1,5 +1,62 @@
 #include <math.h>
 
+// ************************
+//  EDIT YOUR MELODIES HERE!
+// ************************
+
+String notes1 = "ccggaagffeeddc "; // a space represents a rest
+String beats1 = "111111211111124";
+int tempo1 = 450;
+
+String notes2 = "ccggaagffeeddc "; // a space represents a rest
+String beats2 = "111111211111124";
+int tempo2 = 450;
+
+String notes3 = "ccggaagffeeddc "; // a space represents a rest
+String beats3 = "111111211111124";
+int tempo3 = 450;
+
+String notes4 = "ccggaagffeeddc "; // a space represents a rest
+String beats4 = "111111211111124";
+int tempo4 = 450;
+
+String notes5 = "ccggaagffeeddc "; // a space represents a rest
+String beats5 = "111111211111124";
+int tempo5 = 450;
+
+String notes6 = "ccggaagffeeddc "; // a space represents a rest
+String beats6 = "111111211111124";
+int tempo6 = 450;
+
+String notes7 = "ccggaagffeeddc "; // a space represents a rest
+String beats7 = "111111211111124";
+int tempo7 = 450;
+
+String notes8 = "ccggaagffeeddc "; // a space represents a rest
+String beats8 = "111111211111124";
+int tempo8 = 450;
+
+String notes9 = "ccggaagffeeddc "; // a space represents a rest
+String beats9 = "111111211111124";
+int tempo9 = 450;
+
+String notes10 = "ccggaagffeeddc "; // a space represents a rest
+String beats10 = "111111211111124";
+int tempo10 = 450;
+
+String notes11 = "ccggaagffeeddc "; // a space represents a rest
+String beats11 = "111111211111124";
+int tempo11 = 450;
+
+String notes12 = "ccggaagffeeddc "; // a space represents a rest
+String beats12 = "111111211111124";
+int tempo12 = 450;
+
+// ************************
+//  EDIT YOUR MELODIES HERE!
+// ************************
+
+
 //  constants related to the Arduino Nano pin use
 const int clkIn = 2;           // the digital (clock) input
 const int digPin[2] = {3, 4};  // the digital output pins
@@ -13,14 +70,15 @@ volatile int clkState = LOW;
 int digState[2] = {LOW, LOW};        // start with both set low
 unsigned long digMilli[2] = {0, 0};  // a place to store millis()
 
-String notes = "ccggaagffeeddc "; // a space represents a rest
-int beats[] = { 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 4 };
-int tempo = 450;
+String allNotes[12] = {notes1,notes2,notes3,notes4,notes5,notes6,notes7,notes8,notes9,notes10,notes11,notes12};
+String allBeats[12] = {beats1,beats2,beats3,beats4,beats5,beats6,beats7,beats8,beats9,beats10,beats11,beats12};
+int allTempos[12] = {tempo1,tempo2,tempo3,tempo4,tempo5,tempo6,tempo7,tempo8,tempo9,tempo10,tempo11,tempo12};
+
 
 char names[] = { 'a', 'A', 'b', 'c', 'C', 'd', 'D', 'e', 'f', 'F', 'g', 'G' };
 int tones[] = { 0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48};
 
-int reset, octave, transpose, lengthMod;
+int reset, octave, transpose, lengthMod, sequence;
 
 //  ==================== start of setup() ======================
 
@@ -62,8 +120,11 @@ void setup()
 
 void playNote(char note, int duration, int transpose, int octave) {
 
-  if(note != ' '){
-    /* not a rest */
+  if(note != /* REST */ ' ' ){
+
+    digitalWrite(3, HIGH);
+    digitalWrite(4, HIGH);
+  
     for (int i = 0; i < 12; i++) {
       
       if (names[i] == note) {
@@ -76,22 +137,28 @@ void playNote(char note, int duration, int transpose, int octave) {
   //hold the note 
   delay(duration);
   
+  digitalWrite(3, LOW);
+  digitalWrite(4, LOW);
+  
 }
 
 
 void loop() {
   
-  reset=analogRead(0) / 86; //12 value = A,A#,B,C#, etc
+  reset=digitalRead(clkIn); 
+  
+  // 
+  sequence=analogRead(0) / 86; //12 sequences
   octave=analogRead(1) / 86; // 12 values see chords array above
   transpose=analogRead(2) /86;  // UP, DOWN, UP_DOWN, ALTERNATE 1-ALL, ALTERNATE 1-2, ALTERNATE 1-3, RANDOM 
   lengthMod=analogRead(3) / 86 + 1;  
   
-  int length = notes.length() ;
+  int length = allNotes[sequence].length() ;
   for (int i = 0; i < length; i++) {
-     if(analogRead(0) > 512){
+     if(reset == HIGH){
        i = 0;
      }
-     playNote(notes[i], beats[i] * tempo * lengthMod, transpose, octave);
+     playNote(allNotes[sequence][i], (allBeats[sequence][i] - '0') * allTempos[sequence] * lengthMod, transpose, octave);
   }
 }
  
