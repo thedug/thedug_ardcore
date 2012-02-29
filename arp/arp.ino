@@ -74,7 +74,7 @@ void loop()
     //TODO: Would a v/oct input be better?
     root=analogRead(0) / 86; //12 value = A,A#,B,C#, etc
     chord=analogRead(1) / 86; // 12 values see chords array above
-    pattern=analogRead(2) /205;  // UP, DOWN, UP_DOWN, ALTERNATE, RANDOM 
+    pattern=analogRead(2) /146;  // UP, DOWN, UP_DOWN, ALTERNATE 1-ALL, ALTERNATE 1-2, ALTERNATE 1-3, RANDOM 
     
     //TODO: This octave impl is kinda getto since it can cause values to "roll over"
     int pin3 = analogRead(3);
@@ -155,9 +155,8 @@ void loop()
             }
           }  
       }else if(pattern == 3){
-          Serial.println("Alternate");  
+          Serial.println("Alternate 1-ALL");  
           if(previousPosition != 0){
-            Serial.print("not zero setting to 0");
             Serial.println(previousPosition);
             currentPosition = 0;
           }else{
@@ -167,7 +166,25 @@ void loop()
             } 
             previousNon0Position=currentPosition;
           }
-      }else if(pattern == 4){
+      }else if(pattern == 5){
+          Serial.println("Alternate 1-2");         
+          if(previousPosition != 0){
+            Serial.println(previousPosition);
+            currentPosition = 0;
+          }else{
+            currentPosition = 1;
+          }
+      }
+      }else if(pattern == 5){
+          Serial.println("Alternate 1-3");         
+          if(previousPosition != 0){
+            Serial.println(previousPosition);
+            currentPosition = 0;
+          }else{
+            currentPosition = 2;
+          }
+      }      
+      }else if(pattern == 6){
            Serial.println("Random");         
           while(currentPosition == previousPosition || chords[chord][currentPosition] == 0){
             currentPosition = random(0,5);
