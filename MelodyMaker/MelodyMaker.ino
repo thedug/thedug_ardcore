@@ -20,7 +20,7 @@ int tempo = 450;
 char names[] = { 'a', 'A', 'b', 'c', 'C', 'd', 'D', 'e', 'f', 'F', 'g', 'G' };
 int tones[] = { 0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48};
 
-int reset, octave, transpose, lengthMod;
+int octave, transpose, lengthMod;
 
 //  ==================== start of setup() ======================
 
@@ -81,17 +81,15 @@ void playNote(char note, int duration, int transpose, int octave) {
 
 void loop() {
   
-  reset=analogRead(0) / 86; //12 value = A,A#,B,C#, etc
-  octave=analogRead(1) / 86; // 12 values see chords array above
-  transpose=analogRead(2) /86;  // UP, DOWN, UP_DOWN, ALTERNATE 1-ALL, ALTERNATE 1-2, ALTERNATE 1-3, RANDOM 
-  lengthMod=analogRead(3) / 86 + 1;  
-  
   int length = notes.length() ;
   for (int i = 0; i < length; i++) {
+     octave=analogRead(1) / 205; // 12 values see chords array above
+     transpose=analogRead(2) /86;  
+     lengthMod=analogRead(3) / 86 + 1;      
      if(analogRead(0) > 512){
        i = 0;
      }
-     playNote(notes[i], beats[i] * tempo * lengthMod, transpose, octave);
+     playNote(notes[i], beats[i] * tempo / lengthMod, transpose, octave);
   }
 }
  

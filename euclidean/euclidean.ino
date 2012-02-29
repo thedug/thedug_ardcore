@@ -8,6 +8,7 @@ const int trigTime = 25;       // 25 ms trigger timing
 
 //  variables for interrupt handling of the clock input
 volatile int clkState = LOW;
+volatile boolean rising = false;
 
 //  variables used to control the current DIO output states
 int digState[2] = {LOW, LOW};        // start with both set low
@@ -56,6 +57,7 @@ void setup()
   // comment out this call.
   // Note: Interrupt 0 is for pin 2 (clkIn)
   attachInterrupt(0, isr, RISING);
+  attachInterrupt(0, isf, FALLING);
    
 }
 
@@ -71,13 +73,7 @@ void loop()
     reset = analogRead(2);
     skip = analogRead(3) / 205 + 2;
     
-    
-    Serial.print('loop {');
-    Serial.print(pulses);
-    Serial.println(',');
-    Serial.print(steps);
-    Serial.print('}');
-    Serial.println(); 
+   
     
     switcher = false;
     if (pulses > pauses) {
@@ -121,8 +117,8 @@ void loop()
     
   
   // check to see if the clock as been set
-  if (clkState == HIGH) {
-    clkState = LOW;
+  if (rising) {
+     rising = false;     
     
       currentStep++;
 
@@ -142,18 +138,15 @@ void loop()
             writeStep(switcher);
   	    count--;
 	}
+  }else if(clkState == LOW){
+        digitalWrite(digPin[0], LOW);
+        digitalWrite(digPin[1], LOW);       
   }
+    
 
 //TODO: Do something fun with this output    
 //  dacOutput(oct[tempOct]);
-  
-  // do we have to turn off any of the digital outputs?
-//  for (int i=0; i<2; i++) {
-//    if ((digState[i] == HIGH) && (millis() - digMilli[i] > trigTime)) {
-//      digState[i] = LOW;
-//      digitalWrite(digPin[i], LOW);
-//    }
-//  }
+
 }
 
 
@@ -172,6 +165,11 @@ void isr()
   // In most cases, you just want to set a variable and get
   // out.
   clkState = HIGH;
+  rising = true;
+}
+
+void isf(){
+  clkState = LOW:
 }
 
 void writeStep(boolean on){
@@ -197,27 +195,6 @@ void dacOutput(long v)
   }
 }
 
-//  deJitter(int, int) - smooth jitter input
-//  ----------------------------------------
-int deJitter(int v, int test)
-{
-  // this routine just make sure we have a significant value
-  // change before we bother implementing it. This is useful
-  // for cleaning up jittery analog inputs.
-  if (abs(v - test) > 8) {
-    return v;
-  }
-  return test;
-}
 
-//  quantNote(int) - drop an incoming value to a note value
-//  -------------------------------------------------------
-int quantNote(int v)
-{
-  // feed this routine the input from one of the analog inputs
-  // and it will return the value in a 0-64 range, which is
-  // roughly the equivalent of a 0-5V range.
-  return v >> 4;
-}
 
 //  ===================== end of program =======================
