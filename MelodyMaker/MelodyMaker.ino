@@ -78,11 +78,8 @@ int allTempos[12] = {tempo1,tempo2,tempo3,tempo4,tempo5,tempo6,tempo7,tempo8,tem
 char names[] = { 'a', 'A', 'b', 'c', 'C', 'd', 'D', 'e', 'f', 'F', 'g', 'G' };
 int tones[] = { 0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48};
 
-<<<<<<< HEAD
 int reset, octave, transpose, lengthMod, sequence;
-=======
-int octave, transpose, lengthMod;
->>>>>>> 66ae89042a50bab0b0b63393b16e2188f99abd29
+
 
 //  ==================== start of setup() ======================
 
@@ -139,42 +136,36 @@ void playNote(char note, int duration, int transpose, int octave) {
   }
   
   //hold the note 
-  delay(duration);
+  delay(duration/2);
   
   digitalWrite(3, LOW);
   digitalWrite(4, LOW);
+  
+  //hold the note 
+  delay(duration/2);  
   
 }
 
 
 void loop() {
   
-<<<<<<< HEAD
+
   reset=digitalRead(clkIn); 
   
   // 
-  sequence=analogRead(0) / 86; //12 sequences
-  octave=analogRead(1) / 86; // 12 values see chords array above
-  transpose=analogRead(2) /86;  // UP, DOWN, UP_DOWN, ALTERNATE 1-ALL, ALTERNATE 1-2, ALTERNATE 1-3, RANDOM 
-  lengthMod=analogRead(3) / 86 + 1;  
-  
   int length = allNotes[sequence].length() ;
   for (int i = 0; i < length; i++) {
+
+    sequence=analogRead(0) / 20; //12 sequences
+    octave=analogRead(1) / 205; // 5 octaves
+    transpose=analogRead(2) /86;  // 12 transpose values
+    lengthMod=analogRead(3) / 86 + 1;      
+    
      if(reset == HIGH){
        i = 0;
      }
-     playNote(allNotes[sequence][i], (allBeats[sequence][i] - '0') * allTempos[sequence] * lengthMod, transpose, octave);
-=======
-  int length = notes.length() ;
-  for (int i = 0; i < length; i++) {
-     octave=analogRead(1) / 205; // 12 values see chords array above
-     transpose=analogRead(2) /86;  
-     lengthMod=analogRead(3) / 86 + 1;      
-     if(analogRead(0) > 512){
-       i = 0;
-     }
-     playNote(notes[i], beats[i] * tempo / lengthMod, transpose, octave);
->>>>>>> 66ae89042a50bab0b0b63393b16e2188f99abd29
+     playNote(allNotes[sequence][i], (allBeats[sequence][i] - '0') * allTempos[sequence] / lengthMod, transpose, octave);
+
   }
 }
  
