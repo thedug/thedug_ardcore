@@ -98,31 +98,31 @@ void loop()
     if (clkState == HIGH) {
       clkState = LOW;
  
-      Serial.print("Root Note:");  
-      Serial.println(root + 1);  
-      Serial.print("Chord:"); 
-      Serial.print(chords[chord][0]);  
-      Serial.print(","); 
-      Serial.print(chords[chord][1]); 
-      Serial.print(",");    
-      Serial.print(chords[chord][2]);  
-      Serial.print(","); 
-      Serial.print(chords[chord][3]);  
-      Serial.print(","); 
-      Serial.print(chords[chord][4]);
-      Serial.println(); 
+      //Serial.print("Root Note:");  
+      //Serial.println(root + 1);  
+      //Serial.print("Chord:"); 
+      //Serial.print(chords[chord][0]);  
+      //Serial.print(","); 
+      //Serial.print(chords[chord][1]); 
+      //Serial.print(",");    
+      //Serial.print(chords[chord][2]);  
+      //Serial.print(","); 
+      //Serial.print(chords[chord][3]);  
+      //Serial.print(","); 
+      //Serial.print(chords[chord][4]);
+      //Serial.println(); 
            
-      Serial.print("Octave:"); 
-      Serial.println(octave); 
+      //Serial.print("Octave:"); 
+      //Serial.println(octave); 
    
      if (pattern == 0) {
-         Serial.println("Up Pattern");  
+         //Serial.println("Up Pattern");  
           currentPosition++;
           if(chords[chord][currentPosition] == 0){
            currentPosition = 0;
           }      
       }else if(pattern == 1){
-          Serial.println("Down Pattern");  
+          //Serial.println("Down Pattern");  
           currentPosition--;
           if(currentPosition < 0){
             //This only happens in "DOWN" mode so move to end!
@@ -132,7 +132,7 @@ void loop()
             }
           }          
       }else if(pattern == 2){
-          Serial.println("Up/Down Pattern");  
+          //Serial.println("Up/Down Pattern");  
           if(currentDirection == 1){
             currentPosition++;
             if(currentPosition >= MAX_CHORD_LENGTH || chords[chord][currentPosition] == 0){
@@ -151,7 +151,7 @@ void loop()
             }
           }  
       }else if(pattern == 3){
-          Serial.println("Alternate 1-ALL");  
+          //Serial.println("Alternate 1-ALL");  
           if(previousPosition != 0){
             Serial.println(previousPosition);
             currentPosition = 0;
@@ -162,8 +162,8 @@ void loop()
             } 
             previousNon0Position=currentPosition;
           }
-      }else if(pattern == 5){
-          Serial.println("Alternate 1-2");         
+      }else if(pattern == 4){
+          //Serial.println("Alternate 1-2");         
           if(previousPosition != 0){
             Serial.println(previousPosition);
             currentPosition = 0;
@@ -171,7 +171,7 @@ void loop()
             currentPosition = 1;
           }
       }else if(pattern == 5){
-          Serial.println("Alternate 1-3");         
+          //Serial.println("Alternate 1-3");         
           if(previousPosition != 0){
             Serial.println(previousPosition);
             currentPosition = 0;
@@ -179,15 +179,15 @@ void loop()
             currentPosition = 2;
           }
       }else if(pattern == 6){
-           Serial.println("Random");         
+        //   Serial.println("Random");         
           while(currentPosition == previousPosition || chords[chord][currentPosition] == 0){
             currentPosition = random(0,5);
           }
       }
       
-      Serial.print("Playing note: ");
-      Serial.println(chords[chord][currentPosition]);
-      Serial.print("Value: ");
+      //Serial.print("Playing note: ");
+      //Serial.println(chords[chord][currentPosition]);
+      //Serial.print("Value: ");
       
       //Reset previous...
       previousPosition = currentPosition;
